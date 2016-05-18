@@ -1,0 +1,13 @@
+<div class="jumbotron text-center">
+	<h1>Listing</h1>
+	<h4 ng-bind-html="addHorse"></h4>
+</div>
+<div ng-controller="ListHorsesController">
+	<div ng-repeat="horse in horses" class="col-md-3">
+		<div class="well">
+			<p><a ng-href="/horses/{{ horse.slug }}">{{ horse.name }}</a><br />
+			{{ horse.breed }}, {{ horse.sex }}<br />
+			{{ horse.color }}</p>
+		</div>
+	</div>
+</div>
