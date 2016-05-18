@@ -1,0 +1,13 @@
+body { padding-top:30px; }
+
+label.col-md-3 {
+    text-align: right;
+}
+
+.form-row {
+    padding: 10px 10px;
+}
+
+.form-slug {
+    display: inline-block;
+}
