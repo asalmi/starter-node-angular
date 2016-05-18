@@ -4,7 +4,6 @@ angular.module('ListCtrl', []).controller('ListHorsesController', function($scop
 		$scope.horses = horses;
 	})
 
-	
 	if(AuthService.isAuthenticated()) { 
 		$scope.addHorse = '<a href="/horses/new">Add new horse</a>';
 	}
