@@ -23,6 +23,7 @@ angular.module('HorseService', []).factory('HorseService', function($http, $rout
 
  		update: function(name, horseData, callback) {
 			$http.put('/api/horses/' + name, horseData).success(function(horse) {
+				//console.log('horse edit!');
 				var horse = horse;
 				callback(horse);
 			});

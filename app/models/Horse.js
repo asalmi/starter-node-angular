@@ -7,6 +7,7 @@ var Schema = mongoose.Schema;
 var NerdSchema   = new Schema({
     name : {type: String, default: ''},
     slug: {type: String},
+    photos: [{type: Schema.Types.ObjectId, ref: 'Photo'}],
     breed: {type: String },
     sex: {type: String },
     color: {type: String },

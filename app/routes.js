@@ -5,6 +5,8 @@ var bcrypt 		= require('bcrypt-nodejs');
 var passport 	= require('passport');
 var jwt 		= require('jwt-simple');
 var config		= require('../config/db');
+var multer 		= require('multer');
+
 
     module.exports = function(app) {
 
@@ -27,6 +29,41 @@ var config		= require('../config/db');
 		    return null;
 		  }
 		};
+
+
+		var storage = multer.diskStorage({
+		  destination: function (req, file, cb) {
+		    cb(null, 'public/img/')
+		  },
+		  filename: function (req, file, cb) {
+		  	console.log(req.body.imgName);
+		    cb(null, req.body.imgName + '-' + Date.now() + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+		  }
+		})
+
+		var upload 	= multer({ storage: storage }).single('file');
+
+
+/*
+
+	
+	var storage = multer.diskStorage({ //multers disk storage settings
+	    destination: function (req, file, cb) {
+	        cb(null, 'public/img/')
+	    },
+	    filename: function (req, file, cb) {
+	    	console.log(file);
+	    	console.log(req.file);
+	        var datetimestamp = Date.now();
+	        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+	    }
+	});
+
+
+	var upload = multer({ //multer settings
+	        storage: storage
+	    }).single('file');
+*/
 
 
         // server routes ===========================================================
@@ -93,6 +130,49 @@ var config		= require('../config/db');
 			}
 		});
 
+		// UPLOAD routes ===========================================================
+		
+		/*
+		app.post('/api/upload', multer({ dest: 'public/img/'}).single('file'), function(req, res){
+			console.log(req.body); //form fields
+			console.log(req.file); //form files
+			res.status(204).end();
+		}); */
+
+		/*
+		app.post('/api/upload', upload.single('file'), function (req, res, next) {
+		  console.log(req.file);
+		  console.log(req.body);
+		  next();
+		  // req.file is the `avatar` file
+		  // req.body will hold the text fields, if there were any
+		}) */
+
+		
+		app.post('/api/upload', function(req, res) {
+	        upload(req, res, function(err){
+	            if(err){
+	                 res.json({error_code:1,err_desc:err});
+	                 return;
+	            }
+	             res.json({error_code:0,err_desc:null});
+	        })
+	       
+	    });
+
+
+
+		/*
+		app.post('/api/upload', function(req, res) {
+	        upload(req,res,function(err){
+	            if(err){
+	                 res.json({error_code:1,err_desc:err});
+	                 return;
+	            }
+	             res.json({error_code:0,err_desc:null});
+	        })
+	       
+	    }); */
 
 
         // USERS routes ===========================================================
@@ -207,7 +287,7 @@ var config		= require('../config/db');
 	        });
 	    });
 
-		// update the horse with this id (accessed at PUT http://localhost:8080/api/horses/:horse_name)
+		// update the horse with this slug (accessed at PUT http://localhost:8080/api/horses/:horse_name)
 	    app.put('/api/horses/:horse_name', passport.authenticate('jwt', { session: false}), function(req, res) {
 
 	    	var token = getToken(req.headers);

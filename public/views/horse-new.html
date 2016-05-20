@@ -14,6 +14,13 @@
 				<input type="hidden" ng-model="formData.slug" name="slug" />
 			</div>
 			<div class="form-row">
+				<input type="file" ngf-select ng-model="formData.photo" name="photo" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.title" class="col-md-3">Photo title:</label>
+	        	<input type="text" ng-model="formData.photo.title" name="title" />
+	        </div>
+			<div class="form-row">
 				<label for="breed" class="col-md-3">Breed:</label>
 				<input type="text" ng-model="formData.breed" name="breed" />
 			</div>

@@ -26,13 +26,59 @@ angular.module('SingleCtrl', []).controller('SingleHorseController', function($s
 
 });
 
-angular.module('AddNewCtrl', []).controller('NewHorseController', function($scope, HorseService, AuthService, $location) {
+angular.module('AddNewCtrl', []).controller('NewHorseController', function($scope, HorseService, AuthService, $location, Upload, $window) {
 
 	if(AuthService.isAuthenticated()) { 
 
 		$scope.formData = {};
 
+		//var vm = $scope.formData.photo;
+
+		$scope.upload = function (file) {
+	        Upload.upload({
+	            url: 'http://10.0.3.2:8080/api/upload',
+	            data: {imgName: $scope.slug, file:file},
+	        }).then(function (resp) {
+	        	console.log(resp.config.data);
+	            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
+	            console.log(resp.data);
+	        }, function (resp) {
+	            console.log('Error status: ' + resp.status);
+	        }, function (evt) {
+	            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+	            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+	        });
+	    };
+
 		$scope.createHorse = function() {
+
+            //upload($scope.formData.photos); //call upload function
+            $scope.slug = $scope.formData.slug;
+           	$scope.upload($scope.formData.photo);
+
+			/*
+            function upload (file) {
+            	console.log('inside upload');
+	            Upload.upload({
+	                url: 'http://10.0.3.2:8080/api/upload', //webAPI exposed to upload the file
+	                data:{file:file} //pass file as data, should be user ng-model
+	            }).then(function (resp) { //upload function returns a promise
+	                if(resp.data.error_code === 0){ //validate success
+	                    $window.alert('Success ' + resp.config.data.file.title + 'uploaded. Response: ');
+	                } else {
+	                    $window.alert('an error occured');
+	                }
+	            }, function (resp) { //catch error
+	                console.log('Error status: ' + resp.status);
+	                $window.alert('Error status: ' + resp.status);
+	            }, function (evt) { 
+	                console.log(evt);
+	                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+	                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.title);
+	                //vm.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
+	            });
+	        }; */
+
 			HorseService.add($scope.formData, function(data) {
 				$scope.formData = {};
 				$scope.data = data;
@@ -59,7 +105,7 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 	}; */
 });  
 
-angular.module('EditCtrl', []).controller('EditHorseController', function($scope, $routeParams, HorseService, AuthService, $location) {
+angular.module('EditCtrl', []).controller('EditHorseController', function($scope, $routeParams, HorseService, AuthService, $location, Slug) {
 
 	if(AuthService.isAuthenticated()) { 
 
@@ -80,10 +126,13 @@ angular.module('EditCtrl', []).controller('EditHorseController', function($scope
 		});
 
 		$scope.editHorse = function() {
-			HorseService.update($routeParams.slug, $scope.formData, function(horse) {
-				$scope.horse = horse;
 
-				$location.path('/horses/' + $scope.horseSlug);
+			$scope.formData.slug = Slug.slugify($scope.formData.name); 
+
+			HorseService.update($routeParams.slug, $scope.formData, function(horse) {
+
+				$scope.horse = horse;
+				$location.path('/horses/' + $scope.formData.slug);
 			});
 		}
 	} else {
