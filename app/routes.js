@@ -36,8 +36,9 @@ var multer 		= require('multer');
 		    cb(null, 'public/img/')
 		  },
 		  filename: function (req, file, cb) {
-		  	console.log(req.body.imgName);
-		    cb(null, req.body.imgName + '-' + Date.now() + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+		  	//console.log(req.body.imgName);
+		  	var file = req.body.imgName + '-' + Date.now() + '.' + file.originalname.split('.')[file.originalname.split('.').length -1];
+		    cb(null, file)
 		  }
 		})
 
@@ -138,7 +139,7 @@ var multer 		= require('multer');
 			console.log(req.file); //form files
 			res.status(204).end();
 		}); */
-
+	
 		/*
 		app.post('/api/upload', upload.single('file'), function (req, res, next) {
 		  console.log(req.file);
@@ -155,7 +156,10 @@ var multer 		= require('multer');
 	                 res.json({error_code:1,err_desc:err});
 	                 return;
 	            }
-	             res.json({error_code:0,err_desc:null});
+
+				app.set('data', req.file.filename);
+
+	            res.json({error_code:0,err_desc:null});
 	        })
 	       
 	    });
@@ -232,6 +236,8 @@ var multer 		= require('multer');
 
 	    	if (token) {
 			    var decoded = jwt.decode(token, config.secret);
+
+			    var imagePath = 'img/' + app.get('data');
 	        
 		        var horse = new Horse();      // create a new instance of the Horse model
 
@@ -245,6 +251,11 @@ var multer 		= require('multer');
 	            horse.breeder = req.body.breeder;
 	            horse.owner = req.body.owner;
 	            horse.discpline = req.body.discpline;
+	            horse.photos.license = req.body.photos.license;
+	            horse.photos.owner = req.body.photos.owner;
+	            horse.photos.ownerUrl = req.body.photos.ownerUrl;
+	            horse.photos.imgUrl = imagePath;
+
 
 		        // save the horse and check for errors
 		        horse.save(function(err) {

@@ -3,6 +3,7 @@
 	<h4 ng-bind-html="editHorse"></h4>
 </div>
 <div class="col-md-6">
+	<a ng-href="{{ horse.photos.imgUrl}}" target="_self"><img ng-src="{{ horse.photos.imgUrl}}"  class="horse-image"/></a>
 	<ul>
 		<li>id: {{ horse._id }}</li>
 		<li>breed: {{ horse.breed }}</li>

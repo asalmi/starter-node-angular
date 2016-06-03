@@ -5,11 +5,11 @@
 	<form ng-submit="createHorse()">
 		<fieldset class="col-md-8 col-md-offset-2">
 			<div class="form-row">
-				<label for="name" class="col-md-3">Name:</label>
+				<label for="name" class="col-md-4">Name:</label>
 				<input type="text" ng-model="formData.name" name="name" />
 			</div>
 			<div class="form-row">
-				<label for="name" class="col-md-3">Slug:</label>
+				<label for="name" class="col-md-4">Slug:</label>
 				<slug from="formData.name" to="formData.slug" name="slug" class="form-slug">{{ formData.slug }}</slug>
 				<input type="hidden" ng-model="formData.slug" name="slug" />
 			</div>
@@ -17,19 +17,27 @@
 				<input type="file" ngf-select ng-model="formData.photo" name="photo" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" />
 	        </div>
 	        <div class="form-row">
-	        	<label for="photos.title" class="col-md-3">Photo title:</label>
-	        	<input type="text" ng-model="formData.photo.title" name="title" />
+	        	<label for="photos.license" class="col-md-4">Photo license:</label>
+	        	<input type="text" ng-model="formData.photos.license" name="license" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.copyowner" class="col-md-4">Copyright owner:</label>
+	        	<input type="text" ng-model="formData.photos.owner" name="copyowner" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.copyurl" class="col-md-4">Copyright owner url:</label>
+	        	<input type="text" ng-model="formData.photos.ownerUrl" name="copyurl" />
 	        </div>
 			<div class="form-row">
-				<label for="breed" class="col-md-3">Breed:</label>
+				<label for="breed" class="col-md-4">Breed:</label>
 				<input type="text" ng-model="formData.breed" name="breed" />
 			</div>
 			<div class="form-row">
-				<label for="sex" class="col-md-3">Sex:</label>
+				<label for="sex" class="col-md-4">Sex:</label>
 				<input type="text" ng-model="formData.sex" name="sex" />
 			</div>
 			<div class="form-row">
-				<label for="color" class="col-md-3">Color:</label>
+				<label for="color" class="col-md-4">Color:</label>
 				<input type="text" ng-model="formData.color" name="color" />
 			</div>
 			<div class="form-row">

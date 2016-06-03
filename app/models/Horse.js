@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var NerdSchema   = new Schema({
     name : {type: String, default: ''},
     slug: {type: String},
-    photos: [{type: Schema.Types.ObjectId, ref: 'Photo'}],
+    //photos: [{type: Schema.Types.ObjectId, ref: 'Photo'}],
     breed: {type: String },
     sex: {type: String },
     color: {type: String },
@@ -15,7 +15,13 @@ var NerdSchema   = new Schema({
     regNumber: {type: String },
     breeder: {type: String },
     owner: {type: String },
-    discpline: {type: String }
+    discpline: {type: String },
+    photos : { 
+        license: { type: String },
+        owner: { type: String },
+        ownerUrl: { type: String },
+        imgUrl: { type: String}
+    },
 });
 
 

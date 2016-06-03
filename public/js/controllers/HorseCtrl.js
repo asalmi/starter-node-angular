@@ -42,6 +42,16 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 	        	console.log(resp.config.data);
 	            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
 	            console.log(resp.data);
+
+		            
+				HorseService.add($scope.formData, function(data) {
+					$scope.formData = {};
+					$scope.data = data;
+					$location.path('/horses');
+				});
+
+
+
 	        }, function (resp) {
 	            console.log('Error status: ' + resp.status);
 	        }, function (evt) {
@@ -54,6 +64,7 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 
             //upload($scope.formData.photos); //call upload function
             $scope.slug = $scope.formData.slug;
+            //$scope.
            	$scope.upload($scope.formData.photo);
 
 			/*
@@ -79,11 +90,8 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 	            });
 	        }; */
 
-			HorseService.add($scope.formData, function(data) {
-				$scope.formData = {};
-				$scope.data = data;
-				$location.path('/horses');
-			});
+	        console.log();
+
 		};
 	} else {
 		$location.path('/login');

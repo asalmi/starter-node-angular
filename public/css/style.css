@@ -11,3 +11,7 @@ label.col-md-3 {
 .form-slug {
     display: inline-block;
 }
+
+img.horse-image {
+    max-width: 500px;
+}
