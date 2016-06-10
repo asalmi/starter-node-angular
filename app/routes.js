@@ -325,6 +325,8 @@ var mongoose    = require('mongoose');
 		            horse.owner = req.body.owner;
 		            horse.discpline = req.body.discpline;
 
+		            horse.photos = req.body.photos;
+
 		            if(req.body.sire != '') {
 		            	horse.pedigree.sire = req.body.sire;
 		            } else {

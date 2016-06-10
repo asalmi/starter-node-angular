@@ -21,6 +21,7 @@ angular.module('SingleCtrl', []).controller('SingleHorseController', function($s
 
 	HorseService.find($routeParams.slug, function(horse) {
 		$scope.horse = horse;
+		console.log(horse);
 	}); 
 
 });
@@ -124,7 +125,7 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 		  }
 
 		$scope.formData = {};
-		$scope.formData.DOB = $scope.dt;
+
 		//var vm = $scope.formData.photo;
 
 		$scope.upload = function (file) {
@@ -157,6 +158,7 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
             $scope.slug = $scope.formData.slug;
             //$scope.
            	$scope.upload($scope.formData.photo);
+           	$scope.formData.DOB = $scope.dt;
 
 			/*
             function upload (file) {
@@ -180,8 +182,6 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 	                //vm.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
 	            });
 	        }; */
-
-	        console.log();
 
 		};
 	} else {
@@ -308,6 +308,8 @@ angular.module('EditCtrl', []).controller('EditHorseController', function($scope
 
 			$scope.formData = {};
 
+			console.log(horse);
+
 			$scope.horse = horse;
 		  	$scope.formData.name = horse.name;
 		  	$scope.formData.DOB = horse.DOB;
@@ -316,15 +318,19 @@ angular.module('EditCtrl', []).controller('EditHorseController', function($scope
 		  	$scope.formData.breed = horse.breed;
 		  	$scope.formData.sex = horse.sex;
 		  	$scope.formData.color = horse.color;
-		  	$scope.formData.DOB = horse.DOB;
+		  	$scope.formData.offspring = horse.offspring;
+
 		  	if(horse.pedigree.sire != null) {
 		  		$scope.formData.sire = horse.pedigree.sire._id;
+		  	} else {
+		  		$scope.formData.sire = '';
 		  	}
 		  	if(horse.pedigree.dam != null) {
 		  		$scope.formData.dam = horse.pedigree.dam._id;
+		  	} else {
+		  		$scope.formData.dam = '';
 		  	}
-		  	
-		  	
+		  	 
 		});
 
 		$scope.editHorse = function() {

@@ -1,4 +1,6 @@
-angular.module('HorseService', []).factory('HorseService', function($http, $route, $location) {
+angular.module('HorseService', [])
+
+.factory('HorseService', function($http, $route, $location) {
 
  	return {
 
