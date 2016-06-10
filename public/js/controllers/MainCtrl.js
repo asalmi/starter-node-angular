@@ -20,7 +20,6 @@ angular.module('MainCtrl', ['ngSanitize']).controller('MainController', function
             title: 'Dashboard',
             url: '/dashboard'
         }];    
-
 /*
     $rootScope.$on('userLoggedIn', function () {
       $scope.adminMenuLinks = [

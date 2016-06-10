@@ -13,7 +13,17 @@
 				<slug from="formData.name" to="formData.slug" name="slug" class="form-slug">{{ formData.slug }}</slug>
 				<input type="hidden" ng-model="formData.slug" name="slug" />
 			</div>
-			<div class="form-row">
+			
+	        <div class="form-row" ng-controller="NewHorseController">
+		        <label for="DOB" class="col-md-4">DOB:</label>
+		        <p class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" name="DOB" />
+					<span class="input-group-btn">
+		            	<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+		        	</span>
+				</p>
+	        </div>
+	        <div class="form-row">
 				<input type="file" ngf-select ng-model="formData.photo" name="photo" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" />
 	        </div>
 	        <div class="form-row">
@@ -39,6 +49,18 @@
 			<div class="form-row">
 				<label for="color" class="col-md-4">Color:</label>
 				<input type="text" ng-model="formData.color" name="color" />
+			</div>
+			<div class="form-row">
+				<label for="sire" class="col-md-4">Sire:</label>
+				<input type="text" ng-model="formData.sire" name="sire" />
+			</div>
+			<div class="form-row">
+				<label for="dam" class="col-md-4">Dam:</label>
+				<input type="text" ng-model="formData.dam" name="dam" />
+			</div>
+			<div class="form-row">
+				<label for="foal" class="col-md-4">Offspring:</label>
+				<input type="text" ng-model="formData.foal" name="foal" />
 			</div>
 			<div class="form-row">
 				<input type="submit" id="submit" value="create" />

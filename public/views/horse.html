@@ -3,12 +3,38 @@
 	<h4 ng-bind-html="editHorse"></h4>
 </div>
 <div class="col-md-6">
-	<a ng-href="{{ horse.photos.imgUrl}}" target="_self"><img ng-src="{{ horse.photos.imgUrl}}"  class="horse-image"/></a>
+
+	
+	
+	<div ng-repeat="photo in horse.photos">
+		<a ng-href="{{ photo.imgUrl }}" target="_self"><img ng-src="{{ photo.imgUrl}}"  class="horse-image"/></a>
+	</div>
+
+	<h3>Info</h3>
 	<ul>
 		<li>id: {{ horse._id }}</li>
+		<li>DOB: {{ horse.DOB }}</li>
 		<li>breed: {{ horse.breed }}</li>
 		<li>sex: {{ horse.sex }}</li>
 		<li>color: {{ horse.color }}</li>
 	</ul>
+
+	<h3>Pedigree</h3>
+	<ul>
+		<li>sire: <a ng-href="horses/{{ horse.pedigree.sire.slug }}">{{ horse.pedigree.sire.name }}</a></li>
+		<li>dam:  <a ng-href="horses/{{ horse.pedigree.dam.slug }}">{{ horse.pedigree.dam.name }}</a></li>
+	</ul>
+
+	<h3>Offspring</h3>
+	<div class="offspring">
+		<div ng-if="horse.offspring[0].foal.slug != null">
+			<ul ng-repeat="offspring in horse.offspring">
+				<li><a ng-href="horses/{{ offspring.foal.slug }}">{{ offspring.foal.name }}</a>, {{ offspring.foal.sex }}</li>
+			</ul>
+		</div>
+		<div ng-if="horse.offspring[0].foal.slug == null">
+			<p>No foals</p>
+		</div>
+	</div>
 
 </div>

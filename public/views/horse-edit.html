@@ -5,23 +5,59 @@
 	<small ng-controller="RemoveHorseController"><input type="submit" ng-click="removeHorse()" value="remove" /></small>
 </div>
 <div class="col-md-8 col-md-offset-2">
-	<form ng-submit="editHorse()" ng-controlle="EditHorseController">
+	<form ng-submit="editHorse()" ng-controller="EditHorseController">
 		<fieldset class="col-md-8 col-md-offset-2">
 			<div class="form-row">
-				<label for="name" class="col-md-3">Name:</label>
+				<label for="name" class="col-md-4">Name:</label>
 				<input type="text" ng-model="formData.name" name="name" />
 			</div>
 			<div class="form-row">
-				<label for="breed" class="col-md-3">Breed:</label>
+		        <label for="DOB" class="col-md-4">DOB:</label>
+		        <p class="input-group">
+					<input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" name="DOB" />
+					<span class="input-group-btn">
+		            	<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+		        	</span>
+				</p>
+	        </div>
+	        <div class="form-row">
+				<input type="file" ngf-select ng-model="formData.photo" name="photo" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.license" class="col-md-4">Photo license:</label>
+	        	<input type="text" ng-model="formData.photos.license" name="license" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.copyowner" class="col-md-4">Copyright owner:</label>
+	        	<input type="text" ng-model="formData.photos.owner" name="copyowner" />
+	        </div>
+	        <div class="form-row">
+	        	<label for="photos.copyurl" class="col-md-4">Copyright owner url:</label>
+	        	<input type="text" ng-model="formData.photos.ownerUrl" name="copyurl" />
+	        </div>
+			<div class="form-row">
+				<label for="breed" class="col-md-4">Breed:</label>
 				<input type="text" ng-model="formData.breed" name="breed" />
 			</div>
 			<div class="form-row">
-				<label for="sex" class="col-md-3">Sex:</label>
+				<label for="sex" class="col-md-4">Sex:</label>
 				<input type="text" ng-model="formData.sex" name="sex" />
 			</div>
 			<div class="form-row">
-				<label for="color" class="col-md-3">Color:</label>
+				<label for="color" class="col-md-4">Color:</label>
 				<input type="text" ng-model="formData.color" name="color" />
+			</div>
+			<div class="form-row">
+				<label for="sire" class="col-md-4">Sire:</label>
+				<input type="text" ng-model="formData.sire" name="sire" />
+			</div>
+			<div class="form-row">
+				<label for="dam" class="col-md-4">Dam:</label>
+				<input type="text" ng-model="formData.dam" name="dam" />
+			</div>
+			<div class="form-row">
+				<label for="foal" class="col-md-4">Offspring:</label>
+				<input type="text" ng-model="formData.foal" name="foal" />
 			</div>
 			<div class="form-row">
 				<input type="submit" id="submit" value="update" />

@@ -11,6 +11,9 @@ pids
 logs
 results
 
+app/config/cloudinary.js
+app/config/db.js
+
 npm-debug.log
 node_modules
 

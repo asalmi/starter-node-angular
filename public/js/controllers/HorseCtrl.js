@@ -23,15 +23,108 @@ angular.module('SingleCtrl', []).controller('SingleHorseController', function($s
 		$scope.horse = horse;
 	}); 
 
-
 });
 
 angular.module('AddNewCtrl', []).controller('NewHorseController', function($scope, HorseService, AuthService, $location, Upload, $window) {
 
 	if(AuthService.isAuthenticated()) { 
 
-		$scope.formData = {};
+		$scope.today = function() {
+		    $scope.dt = new Date();
+		  };
+		  $scope.today();
 
+		  $scope.clear = function() {
+		    $scope.dt = null;
+		  };
+
+		  $scope.inlineOptions = {
+		    customClass: getDayClass,
+		    minDate: new Date(),
+		    showWeeks: true
+		  };
+
+		  $scope.dateOptions = {
+		    dateDisabled: disabled,
+		    formatYear: 'yy',
+		    maxDate: new Date(2020, 5, 22),
+		    minDate: new Date(),
+		    startingDay: 1
+		  };
+
+		  // Disable weekend selection
+		  function disabled(data) {
+		    var date = data.date,
+		      mode = data.mode;
+		    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+		  }
+
+		  $scope.toggleMin = function() {
+		    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+		    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+		  };
+
+		  $scope.toggleMin();
+
+		  $scope.open1 = function() {
+		    $scope.popup1.opened = true;
+		  };
+
+		  $scope.open2 = function() {
+		    $scope.popup2.opened = true;
+		  };
+
+		  $scope.setDate = function(year, month, day) {
+		    $scope.dt = new Date(year, month, day);
+		  };
+
+		  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		  $scope.format = $scope.formats[0];
+		  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+		  $scope.popup1 = {
+		    opened: false
+		  };
+
+		  $scope.popup2 = {
+		    opened: false
+		  };
+
+		  var tomorrow = new Date();
+		  tomorrow.setDate(tomorrow.getDate() + 1);
+		  var afterTomorrow = new Date();
+		  afterTomorrow.setDate(tomorrow.getDate() + 1);
+		  $scope.events = [
+		    {
+		      date: tomorrow,
+		      status: 'full'
+		    },
+		    {
+		      date: afterTomorrow,
+		      status: 'partially'
+		    }
+		  ];
+
+		  function getDayClass(data) {
+		    var date = data.date,
+		      mode = data.mode;
+		    if (mode === 'day') {
+		      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+		      for (var i = 0; i < $scope.events.length; i++) {
+		        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+		        if (dayToCheck === currentDay) {
+		          return $scope.events[i].status;
+		        }
+		      }
+		    }
+
+		    return '';
+		  }
+
+		$scope.formData = {};
+		$scope.formData.DOB = $scope.dt;
 		//var vm = $scope.formData.photo;
 
 		$scope.upload = function (file) {
@@ -49,8 +142,6 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 					$scope.data = data;
 					$location.path('/horses');
 				});
-
-
 
 	        }, function (resp) {
 	            console.log('Error status: ' + resp.status);
@@ -97,8 +188,7 @@ angular.module('AddNewCtrl', []).controller('NewHorseController', function($scop
 		$location.path('/login');
 	}
 
-/*
-
+	/*
 	$scope.createHorse = function() {
 		$http.post('/api/horses/', $scope.formData)
 			.success(function(data) {
@@ -120,22 +210,127 @@ angular.module('EditCtrl', []).controller('EditHorseController', function($scope
 		$scope.horseId = $routeParams._id;
 		$scope.horseSlug = $routeParams.slug;
 
+		$scope.today = function() {
+		    $scope.dt = new Date();
+		  };
+		  $scope.today();
+
+		  $scope.clear = function() {
+		    $scope.dt = null;
+		  };
+
+		  $scope.inlineOptions = {
+		    customClass: getDayClass,
+		    minDate: new Date(),
+		    showWeeks: true
+		  };
+
+		  $scope.dateOptions = {
+		    dateDisabled: disabled,
+		    formatYear: 'yy',
+		    maxDate: new Date(2020, 5, 22),
+		    minDate: new Date(),
+		    startingDay: 1
+		  };
+
+		  // Disable weekend selection
+		  function disabled(data) {
+		    var date = data.date,
+		      mode = data.mode;
+		    return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+		  }
+
+		  $scope.toggleMin = function() {
+		    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+		    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+		  };
+
+		  $scope.toggleMin();
+
+		  $scope.open1 = function() {
+		    $scope.popup1.opened = true;
+		  };
+
+		  $scope.open2 = function() {
+		    $scope.popup2.opened = true;
+		  };
+
+		  $scope.setDate = function(year, month, day) {
+		    $scope.dt = new Date(year, month, day);
+		  };
+
+		  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		  $scope.format = $scope.formats[0];
+		  $scope.altInputFormats = ['M!/d!/yyyy'];
+
+		  $scope.popup1 = {
+		    opened: false
+		  };
+
+		  $scope.popup2 = {
+		    opened: false
+		  };
+
+		  var tomorrow = new Date();
+		  tomorrow.setDate(tomorrow.getDate() + 1);
+		  var afterTomorrow = new Date();
+		  afterTomorrow.setDate(tomorrow.getDate() + 1);
+		  $scope.events = [
+		    {
+		      date: tomorrow,
+		      status: 'full'
+		    },
+		    {
+		      date: afterTomorrow,
+		      status: 'partially'
+		    }
+		  ];
+
+		  function getDayClass(data) {
+		    var date = data.date,
+		      mode = data.mode;
+		    if (mode === 'day') {
+		      var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+		      for (var i = 0; i < $scope.events.length; i++) {
+		        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+		        if (dayToCheck === currentDay) {
+		          return $scope.events[i].status;
+		        }
+		      }
+		    }
+
+		    return '';
+		  }
+
 		HorseService.find($routeParams.slug, function(horse) {	
 
 			$scope.formData = {};
 
 			$scope.horse = horse;
 		  	$scope.formData.name = horse.name;
+		  	$scope.formData.DOB = horse.DOB;
+		  	$scope.formData.photos = horse.photos;
 		  	$scope.formData.slug = horse.slug;
 		  	$scope.formData.breed = horse.breed;
 		  	$scope.formData.sex = horse.sex;
 		  	$scope.formData.color = horse.color;
+		  	$scope.formData.DOB = horse.DOB;
+		  	if(horse.pedigree.sire != null) {
+		  		$scope.formData.sire = horse.pedigree.sire._id;
+		  	}
+		  	if(horse.pedigree.dam != null) {
+		  		$scope.formData.dam = horse.pedigree.dam._id;
+		  	}
+		  	
 		  	
 		});
 
 		$scope.editHorse = function() {
 
 			$scope.formData.slug = Slug.slugify($scope.formData.name); 
+			$scope.formData.DOB = $scope.dt;
 
 			HorseService.update($routeParams.slug, $scope.formData, function(horse) {
 

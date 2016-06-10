@@ -6,10 +6,10 @@ var passport 	= require('passport');
 var jwt 		= require('jwt-simple');
 var config		= require('../config/db');
 var multer 		= require('multer');
+var mongoose    = require('mongoose');
 
 
     module.exports = function(app) {
-
 		
     	function sessionCheck(req,res,next){
 
@@ -30,7 +30,6 @@ var multer 		= require('multer');
 		  }
 		};
 
-
 		var storage = multer.diskStorage({
 		  destination: function (req, file, cb) {
 		    cb(null, 'public/img/')
@@ -43,11 +42,8 @@ var multer 		= require('multer');
 		})
 
 		var upload 	= multer({ storage: storage }).single('file');
+	/*
 
-
-/*
-
-	
 	var storage = multer.diskStorage({ //multers disk storage settings
 	    destination: function (req, file, cb) {
 	        cb(null, 'public/img/')
@@ -64,7 +60,7 @@ var multer 		= require('multer');
 	var upload = multer({ //multer settings
 	        storage: storage
 	    }).single('file');
-*/
+	*/
 
 
         // server routes ===========================================================
@@ -149,7 +145,6 @@ var multer 		= require('multer');
 		  // req.body will hold the text fields, if there were any
 		}) */
 
-		
 		app.post('/api/upload', function(req, res) {
 	        upload(req, res, function(err){
 	            if(err){
@@ -164,8 +159,6 @@ var multer 		= require('multer');
 	       
 	    });
 
-
-
 		/*
 		app.post('/api/upload', function(req, res) {
 	        upload(req,res,function(err){
@@ -177,7 +170,6 @@ var multer 		= require('multer');
 	        })
 	       
 	    }); */
-
 
         // USERS routes ===========================================================
         // create a user
@@ -237,9 +229,16 @@ var multer 		= require('multer');
 	    	if (token) {
 			    var decoded = jwt.decode(token, config.secret);
 
-			    var imagePath = 'img/' + app.get('data');
+			    
+			    if(app.get('data')) {
+			    	var imagePath = 'img/' + app.get('data');
+			    } else {
+			    	var imagePath = 'img/not-found.jpg';
+			    }
 	        
 		        var horse = new Horse();      // create a new instance of the Horse model
+
+		        console.log(req.body);
 
 		        horse.name = req.body.name;
 	            horse.slug = req.body.slug;
@@ -251,11 +250,14 @@ var multer 		= require('multer');
 	            horse.breeder = req.body.breeder;
 	            horse.owner = req.body.owner;
 	            horse.discpline = req.body.discpline;
-	            horse.photos.license = req.body.photos.license;
-	            horse.photos.owner = req.body.photos.owner;
-	            horse.photos.ownerUrl = req.body.photos.ownerUrl;
+	            horse.photos = { 'license' : req.body.photos.license, 'owner' : req.body.photos.owner, 'ownerUrl' : req.body.photos.ownerUrl, 'imgUrl' : imagePath };
 	            horse.photos.imgUrl = imagePath;
+	            horse.pedigree.sire = req.body.sire;
+	            horse.pedigree.dam = req.body.dam;
 
+	            console.log(req.body.foal);
+	           
+	           	horse.offspring = { 'foal': mongoose.Types.ObjectId(req.body.foal) };
 
 		        // save the horse and check for errors
 		        horse.save(function(err) {
@@ -276,12 +278,10 @@ var multer 		= require('multer');
 
             // use mongoose to get all horses in the database
             Horse.find(function(err, horses) {
-
                 // if there is an error retrieving, send the error. 
-                                // nothing after res.send(err) will execute
+                // nothing after res.send(err) will execute
                 if (err)
                     res.send(err);
-
                 res.json(horses); // return all horses in JSON format
             });
         });
@@ -291,11 +291,14 @@ var multer 		= require('multer');
 
         // get the horse with that id (accessed at GET http://localhost:8080/api/horses/:horse_name)
 	    app.get('/api/horses/:horse_name', function(req, res) {
-	        Horse.findOne({'slug': req.params.horse_name}, function(err, horse) {
-	            if (err)
-	                res.send(err);
-	            res.json(horse);
-	        });
+
+	    	Horse
+	    		.findOne({ 'slug': req.params.horse_name })
+				.populate('pedigree.sire pedigree.dam offspring.foal')
+				.exec(function (err, horse) {
+					if (err) res.send(err);
+					res.json(horse);  
+				});
 	    });
 
 		// update the horse with this slug (accessed at PUT http://localhost:8080/api/horses/:horse_name)
@@ -321,6 +324,17 @@ var multer 		= require('multer');
 		            horse.breeder = req.body.breeder;
 		            horse.owner = req.body.owner;
 		            horse.discpline = req.body.discpline;
+
+		            if(req.body.sire != '') {
+		            	horse.pedigree.sire = req.body.sire;
+		            } else {
+		            	horse.pedigree.sire = null;
+		            }
+		            if(req.body.dam != '') {
+		            	horse.pedigree.dam = req.body.dam;
+		            } else {
+		            	horse.pedigree.dam = null;
+		            }
 
 		            // save the horse
 		            horse.save(function(err) {

@@ -11,6 +11,4 @@ angular.module('DashboardCtrl', []).controller('DashboardController', function($
     } else {
     	$location.path('/login');
     }
-
-    
 });
